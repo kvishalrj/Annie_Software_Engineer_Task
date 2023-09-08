@@ -231,18 +231,121 @@ def pick_carrot(game_map, x, y, counter):
 
 
 def jump_rabbit_hole(game_map, x, y):
-    if game_map[x][y+1] == RABBIT_HOLE and y+2 < map_size:
-        game_map[x][y] = PATHWAY_STONE
-        game_map[x][y+2] = RABBIT if RABBIT else RABBIT_WITH_CARROT
-    elif game_map[x][y-1] == RABBIT_HOLE and y-2 >= 0:
-        game_map[x][y] = PATHWAY_STONE
-        game_map[x][y-2] = RABBIT if RABBIT else RABBIT_WITH_CARROT
-    elif game_map[x+1][y] == RABBIT_HOLE and x+2 < map_size:
-        game_map[x][y] = PATHWAY_STONE
-        game_map[x+2][y] = RABBIT if RABBIT else RABBIT_WITH_CARROT
-    elif game_map[x-1][y] == RABBIT_HOLE and x-2 >= 0:
-        game_map[x][y] = PATHWAY_STONE
-        game_map[x-2][y] = RABBIT if RABBIT else RABBIT_WITH_CARROT
+    if 0 < x < map_size-2 and 0 < y < map_size-2:
+        if game_map[x][y+1] == RABBIT_HOLE and game_map[x][y+2] != RABBIT_HOLE:
+            current_rabbit = game_map[x][y]
+            game_map[x][y] = PATHWAY_STONE
+            game_map[x][y+2] = current_rabbit
+        elif game_map[x][y-1] == RABBIT_HOLE and game_map[x][y-2] != RABBIT_HOLE:
+            current_rabbit = game_map[x][y]
+            game_map[x][y] = PATHWAY_STONE
+            game_map[x][y-2] = current_rabbit
+        elif game_map[x+1][y] == RABBIT_HOLE and game_map[x+2][y] != RABBIT_HOLE:
+            current_rabbit = game_map[x][y]
+            game_map[x][y] = PATHWAY_STONE
+            game_map[x+2][y] = current_rabbit
+        elif game_map[x-1][y] == RABBIT_HOLE and game_map[x-2][y] != RABBIT_HOLE:
+            current_rabbit = game_map[x][y]
+            game_map[x][y] = PATHWAY_STONE
+            game_map[x-2][y] = current_rabbit
+
+    elif x == 0 and y == 0:
+        if game_map[x][y+1] == RABBIT_HOLE and game_map[x][y+2] != RABBIT_HOLE:
+            current_rabbit = game_map[x][y]
+            game_map[x][y] = PATHWAY_STONE
+            game_map[x][y+2] = current_rabbit
+        elif game_map[x+1][y] == RABBIT_HOLE and game_map[x+2][y] != RABBIT_HOLE:
+            current_rabbit = game_map[x][y]
+            game_map[x][y] = PATHWAY_STONE
+            game_map[x+2][y] = current_rabbit
+
+    elif x == map_size-1 and y == map_size-1 and game_map[x][y-2] != RABBIT_HOLE:
+        if game_map[x][y-1] == RABBIT_HOLE:
+            current_rabbit = game_map[x][y]
+            game_map[x][y] = PATHWAY_STONE
+            game_map[x][y-2] = current_rabbit
+        elif game_map[x-1][y] == RABBIT_HOLE and game_map[x-2][y] != RABBIT_HOLE:
+            current_rabbit = game_map[x][y]
+            game_map[x][y] = PATHWAY_STONE
+            game_map[x-2][y] = current_rabbit
+
+    elif x == 0 and y == map_size-1:
+        if game_map[x][y-1] == RABBIT_HOLE and game_map[x][y-2] != RABBIT_HOLE:
+            current_rabbit = game_map[x][y]
+            game_map[x][y] = PATHWAY_STONE
+            game_map[x][y-2] = current_rabbit
+        elif game_map[x+1][y] == RABBIT_HOLE and game_map[x+2][y] != RABBIT_HOLE:
+            current_rabbit = game_map[x][y]
+            game_map[x][y] = PATHWAY_STONE
+            game_map[x+2][y] = current_rabbit
+
+    elif x == map_size-1 and y == 0:
+        if game_map[x][y+1] == RABBIT_HOLE and game_map[x][y+2] != RABBIT_HOLE:
+            current_rabbit = game_map[x][y]
+            game_map[x][y] = PATHWAY_STONE
+            game_map[x][y+2] = current_rabbit
+        elif game_map[x-1][y] == RABBIT_HOLE and game_map[x-2][y] != RABBIT_HOLE:
+            current_rabbit = game_map[x][y]
+            game_map[x][y] = PATHWAY_STONE
+            game_map[x-2][y] = current_rabbit
+
+    else:
+
+        if x < 2:
+            if game_map[x][y+1] == RABBIT_HOLE and game_map[x][y+2] != RABBIT_HOLE:
+                current_rabbit = game_map[x][y]
+                game_map[x][y] = PATHWAY_STONE
+                game_map[x][y+2] = current_rabbit
+            elif game_map[x][y-1] == RABBIT_HOLE and game_map[x][y-2] != RABBIT_HOLE:
+                current_rabbit = game_map[x][y]
+                game_map[x][y] = PATHWAY_STONE
+                game_map[x][y-2] = current_rabbit
+            elif game_map[x+1][y] == RABBIT_HOLE and game_map[x+2][y] != RABBIT_HOLE:
+                current_rabbit = game_map[x][y]
+                game_map[x][y] = PATHWAY_STONE
+                game_map[x+2][y] = current_rabbit
+
+        elif map_size-3 < x < map_size:
+            if game_map[x][y+1] == RABBIT_HOLE and game_map[x][y+2] != RABBIT_HOLE:
+                current_rabbit = game_map[x][y]
+                game_map[x][y] = PATHWAY_STONE
+                game_map[x][y+2] = current_rabbit
+            elif game_map[x][y-1] == RABBIT_HOLE and game_map[x][y-2] != RABBIT_HOLE:
+                current_rabbit = game_map[x][y]
+                game_map[x][y] = PATHWAY_STONE
+                game_map[x][y-2] = current_rabbit
+            elif game_map[x-1][y] == RABBIT_HOLE and game_map[x-2][y] != RABBIT_HOLE:
+                current_rabbit = game_map[x][y]
+                game_map[x][y] = PATHWAY_STONE
+                game_map[x-2][y] = current_rabbit
+
+        elif y < 2:
+            if game_map[x][y+1] == RABBIT_HOLE and game_map[x][y+2] != RABBIT_HOLE:
+                current_rabbit = game_map[x][y]
+                game_map[x][y] = PATHWAY_STONE
+                game_map[x][y+2] = current_rabbit
+            elif game_map[x+1][y] == RABBIT_HOLE and game_map[x+2][y] != RABBIT_HOLE:
+                current_rabbit = game_map[x][y]
+                game_map[x][y] = PATHWAY_STONE
+                game_map[x+2][y] = current_rabbit
+            elif game_map[x-1][y] == RABBIT_HOLE and game_map[x-2][y] != RABBIT_HOLE:
+                current_rabbit = game_map[x][y]
+                game_map[x][y] = PATHWAY_STONE
+                game_map[x-2][y] = current_rabbit
+
+        elif map_size-3 < y < map_size:
+            if game_map[x][y-1] == RABBIT_HOLE and game_map[x][y-2] != RABBIT_HOLE:
+                current_rabbit = game_map[x][y]
+                game_map[x][y] = PATHWAY_STONE
+                game_map[x][y-2] = current_rabbit
+            elif game_map[x+1][y] == RABBIT_HOLE and game_map[x+2][y] != RABBIT_HOLE:
+                current_rabbit = game_map[x][y]
+                game_map[x][y] = PATHWAY_STONE
+                game_map[x+2][y] = current_rabbit
+            elif game_map[x-1][y] == RABBIT_HOLE and game_map[x-2][y] != RABBIT_HOLE:
+                current_rabbit = game_map[x][y]
+                game_map[x][y] = PATHWAY_STONE
+                game_map[x-2][y] = current_rabbit
 
 
 # Check if the player has won by placing a carrot in any rabbit hole
