@@ -1,4 +1,5 @@
 import random
+import os
 
 # Constants for game elements
 RABBIT = 'r'
@@ -377,6 +378,7 @@ def main():
             break
 
         elif move == 'p' or move == 'j':
+            os.system('cls')
             if move == 'p':
                 counter = pick_carrot(game_map, rabbit_x, rabbit_y, counter)
             elif move == 'j':
@@ -413,7 +415,9 @@ def main():
                     game_map[rabbit_x][rabbit_y] = PATHWAY_STONE
                     rabbit_x, rabbit_y = new_x, new_y
                     game_map[rabbit_x][rabbit_y] = current_rabbit
+                    os.system('cls')
             else:
+                os.system('cls')
                 print("Invalid move. Try again.")
 
 
