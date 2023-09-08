@@ -8,20 +8,18 @@ RABBIT_HOLE = 'O'
 PATHWAY_STONE = '-'
 
 # Initialize game parameters
-map_size = int(input("Enter the size of the map (minimum 100): "))
-num_carrots = int(input("Enter the number of carrots: "))
-num_rabbit_holes = int(input("Enter the number of rabbit holes: "))
+map_size = int(input("Enter the size of the grid (minimum 3): "))
+num_carrots = int(input("Enter the number of carrots (minimum 2): "))
+num_rabbit_holes = int(input("Enter the number of rabbit holes (minimum 2): "))
 
 while map_size < 3:
     map_size = int(input("Please enter grid size greater than 2: "))
 
 while num_carrots <= 1:
-    num_carrots = int(
-        input("Please enter number of carrots greater than 1: "))
+    num_carrots = int(input("Please enter number of carrots greater than 1: "))
 
 while num_rabbit_holes <= 1:
-    num_rabbit_holes = int(
-        input("Please enter number of holes greater than 1: "))
+    num_rabbit_holes = int(input("Please enter number of holes greater than 1: "))
 
 # Create a 2D map
 
@@ -85,47 +83,47 @@ def is_valid_move(game_map, x, y):
 
 def pick_carrot(game_map, x, y):
     if x<map_size-1 and y<map_size-1:
-        if game_map[x][y+1] == RABBIT_HOLE or game_map[x][y-1] == RABBIT_HOLE or game_map[x+1][y] == RABBIT_HOLE or game_map[x-1][y] == RABBIT_HOLE:
+        if game_map[x][y] == RABBIT_WITH_CARROT and (game_map[x][y+1] == RABBIT_HOLE or game_map[x][y-1] == RABBIT_HOLE or game_map[x+1][y] == RABBIT_HOLE or game_map[x-1][y] == RABBIT_HOLE):
             game_map[x][y] = RABBIT 
         else:
-            if game_map[x][y+1] == CARROT:
+            if game_map[x][y+1] == CARROT and game_map[x][y] == RABBIT:
                 game_map[x][y+1] = PATHWAY_STONE
                 game_map[x][y] = RABBIT_WITH_CARROT
-            elif game_map[x][y-1] == CARROT:
+            elif game_map[x][y-1] == CARROT and game_map[x][y] == RABBIT:
                 game_map[x][y-1] = PATHWAY_STONE
                 game_map[x][y] = RABBIT_WITH_CARROT
-            elif game_map[x+1][y] == CARROT:
+            elif game_map[x+1][y] == CARROT and game_map[x][y] == RABBIT:
                 game_map[x+1][y] = PATHWAY_STONE
                 game_map[x][y] = RABBIT_WITH_CARROT
-            elif game_map[x-1][y] == CARROT:
+            elif game_map[x-1][y] == CARROT and game_map[x][y] == RABBIT:
                 game_map[x-1][y] = PATHWAY_STONE
                 game_map[x][y] = RABBIT_WITH_CARROT
     else:
         if x==map_size-1:
-            if game_map[x][y+1] == RABBIT_HOLE or game_map[x][y-1] == RABBIT_HOLE or game_map[x-1][y] == RABBIT_HOLE:
+            if game_map[x][y] == RABBIT_WITH_CARROT and (game_map[x][y+1] == RABBIT_HOLE or game_map[x][y-1] == RABBIT_HOLE or game_map[x-1][y] == RABBIT_HOLE):
                 game_map[x][y] = RABBIT 
             else:
-                if game_map[x][y+1] == CARROT:
+                if game_map[x][y+1] == CARROT and game_map[x][y] == RABBIT:
                     game_map[x][y+1] = PATHWAY_STONE
                     game_map[x][y] = RABBIT_WITH_CARROT
-                elif game_map[x][y-1] == CARROT:
+                elif game_map[x][y-1] == CARROT and game_map[x][y] == RABBIT:
                     game_map[x][y-1] = PATHWAY_STONE
                     game_map[x][y] = RABBIT_WITH_CARROT
-                elif game_map[x-1][y] == CARROT:
+                elif game_map[x-1][y] == CARROT and game_map[x][y] == RABBIT:
                     game_map[x-1][y] = PATHWAY_STONE
                     game_map[x][y] = RABBIT_WITH_CARROT
         else:
             if y==map_size-1:
-                if game_map[x][y-1] == RABBIT_HOLE or game_map[x+1][y] == RABBIT_HOLE or game_map[x-1][y] == RABBIT_HOLE:
+                if game_map[x][y] == RABBIT_WITH_CARROT and (game_map[x][y-1] == RABBIT_HOLE or game_map[x+1][y] == RABBIT_HOLE or game_map[x-1][y] == RABBIT_HOLE):
                     game_map[x][y] = RABBIT
                 else:
-                    if game_map[x][y-1] == CARROT:
+                    if game_map[x][y-1] == CARROT and game_map[x][y] == RABBIT:
                         game_map[x][y-1] = PATHWAY_STONE
                         game_map[x][y] = RABBIT_WITH_CARROT
-                    elif game_map[x+1][y] == CARROT:
+                    elif game_map[x+1][y] == CARROT and game_map[x][y] == RABBIT:
                         game_map[x+1][y] = PATHWAY_STONE
                         game_map[x][y] = RABBIT_WITH_CARROT
-                    elif game_map[x-1][y] == CARROT:
+                    elif game_map[x-1][y] == CARROT and game_map[x][y] == RABBIT:
                         game_map[x-1][y] = PATHWAY_STONE
                         game_map[x][y] = RABBIT_WITH_CARROT
 
@@ -206,9 +204,10 @@ def main():
                     new_y += 1
 
                 if is_valid_move(game_map, new_x, new_y):
+                    current_rabbit = game_map[rabbit_x][rabbit_y]
                     game_map[rabbit_x][rabbit_y] = PATHWAY_STONE
                     rabbit_x, rabbit_y = new_x, new_y
-                    game_map[rabbit_x][rabbit_y] = RABBIT
+                    game_map[rabbit_x][rabbit_y] = current_rabbit
 
                     if check_win(game_map):
                         display_map(game_map)
