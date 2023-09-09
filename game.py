@@ -8,20 +8,6 @@ CARROT = 'c'
 RABBIT_HOLE = 'O'
 PATHWAY_STONE = '-'
 
-# Initialize game parameters
-map_size = int(input("Enter the size of the grid (minimum 3): "))
-num_carrots = int(input("Enter the number of carrots (minimum 2): "))
-num_rabbit_holes = int(input("Enter the number of rabbit holes (minimum 2): "))
-
-while map_size < 3:
-    map_size = int(input("Please enter grid size greater than 2: "))
-
-while num_carrots <= 1:
-    num_carrots = int(input("Please enter number of carrots greater than 1: "))
-
-while num_rabbit_holes <= 1:
-    num_rabbit_holes = int(
-        input("Please enter number of holes greater than 1: "))
 
 # Create a 2D map
 
@@ -58,7 +44,7 @@ def create_map(map_size, num_carrots, num_rabbit_holes):
 # Find the position of the rabbit on the map
 
 
-def find_rabbit_position(game_map):
+def find_rabbit_position(game_map, map_size):
     for i in range(map_size):
         for j in range(map_size):
             if game_map[i][j] == RABBIT or game_map[i][j] == RABBIT_WITH_CARROT:
@@ -74,7 +60,7 @@ def display_map(game_map):
 # Check if the move is within the boundaries of the map
 
 
-def is_valid_move(game_map, x, y):
+def is_valid_move(game_map, x, y, map_size):
     if 0 <= x < map_size and 0 <= y < map_size and game_map[x][y] != CARROT and game_map[x][y] != RABBIT_HOLE:
         return True
 
@@ -83,7 +69,7 @@ def is_valid_move(game_map, x, y):
 # Pick up a carrot if available at the current position
 
 
-def pick_carrot(game_map, x, y, counter):
+def pick_carrot(game_map, x, y, counter, map_size):
     if 0 < x < map_size-1 and 0 < y < map_size-1:
         if game_map[x][y] == RABBIT_WITH_CARROT and (game_map[x][y+1] == RABBIT_HOLE or game_map[x][y-1] == RABBIT_HOLE or game_map[x+1][y] == RABBIT_HOLE or game_map[x-1][y] == RABBIT_HOLE):
             game_map[x][y] = RABBIT
@@ -231,7 +217,7 @@ def pick_carrot(game_map, x, y, counter):
 # Jump over a rabbit hole if adjacent
 
 
-def jump_rabbit_hole(game_map, x, y):
+def jump_rabbit_hole(game_map, x, y, map_size):
     if 0 < x < map_size-2 and 0 < y < map_size-2:
         if game_map[x][y+1] == RABBIT_HOLE and game_map[x][y+2] != RABBIT_HOLE:
             current_rabbit = game_map[x][y]
@@ -350,7 +336,7 @@ def jump_rabbit_hole(game_map, x, y):
 
 
 # Check if the player has won by placing a carrot in any rabbit hole
-def check_win(game_map, counter):
+def check_win(counter):
     if counter == 2:
         return True
     return False
@@ -359,18 +345,32 @@ def check_win(game_map, counter):
 
 
 def main():
+    # Initialize game parameters
+    map_size = int(input("Enter the size of the grid (minimum 3): "))
+    num_carrots = int(input("Enter the number of carrots (minimum 2): "))
+    num_rabbit_holes = int(input("Enter the number of rabbit holes (minimum 2): "))
+
+    while map_size < 3:
+        map_size = int(input("Please enter grid size greater than 2: "))
+
+    while num_carrots <= 1:
+        num_carrots = int(input("Please enter number of carrots greater than 1: "))
+
+    while num_rabbit_holes <= 1:
+        num_rabbit_holes = int(input("Please enter number of holes greater than 1: "))
+        
     game_map = create_map(map_size, num_carrots, num_rabbit_holes)
     counter = 0
 
     while True:
 
-        if check_win(game_map, counter):
+        if check_win(counter):
             display_map(game_map)
             print("Congratulations! You won!")
             break
 
         display_map(game_map)
-        rabbit_x, rabbit_y = find_rabbit_position(game_map)
+        rabbit_x, rabbit_y = find_rabbit_position(game_map, map_size)
         move = input("Enter your move (a/d/w/s/p/j/q): ").lower()
 
         if move == 'q':
@@ -380,9 +380,9 @@ def main():
         elif move == 'p' or move == 'j':
             os.system('cls')
             if move == 'p':
-                counter = pick_carrot(game_map, rabbit_x, rabbit_y, counter)
+                counter = pick_carrot(game_map, rabbit_x, rabbit_y, counter, map_size)
             elif move == 'j':
-                jump_rabbit_hole(game_map, rabbit_x, rabbit_y)
+                jump_rabbit_hole(game_map, rabbit_x, rabbit_y, map_size)
 
         else:
             new_x, new_y = rabbit_x, rabbit_y
@@ -410,7 +410,7 @@ def main():
                     new_x += 1
                     new_y += 1
 
-                if is_valid_move(game_map, new_x, new_y):
+                if is_valid_move(game_map, new_x, new_y, map_size):
                     current_rabbit = game_map[rabbit_x][rabbit_y]
                     game_map[rabbit_x][rabbit_y] = PATHWAY_STONE
                     rabbit_x, rabbit_y = new_x, new_y
@@ -422,4 +422,13 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    print()
+    print('Innstructions:')
+    print('Press Enter to play the game; Press any other key to Quit.')
+    print('Repeat the same after every play.')
+    key = input()
+    if key == "":
+        main()
+
+
+
