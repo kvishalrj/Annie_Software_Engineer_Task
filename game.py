@@ -334,13 +334,6 @@ def jump_rabbit_hole(game_map, x, y, map_size):
                 game_map[x][y] = PATHWAY_STONE
                 game_map[x-2][y] = current_rabbit
 
-
-# Check if the player has won by placing a carrot in any rabbit hole
-def check_win(counter):
-    if counter == 2:
-        return True
-    return False
-
 # Main game loop
 
 
@@ -364,7 +357,7 @@ def main():
 
     while True:
 
-        if check_win(counter):
+        if counter==2:
             display_map(game_map)
             print("Congratulations! You won!")
             break
@@ -380,7 +373,8 @@ def main():
         elif move == 'p' or move == 'j':
             os.system('cls')
             if move == 'p':
-                counter = pick_carrot(game_map, rabbit_x, rabbit_y, counter, map_size)
+                co = pick_carrot(game_map, rabbit_x, rabbit_y, counter, map_size)
+                counter = co
             elif move == 'j':
                 jump_rabbit_hole(game_map, rabbit_x, rabbit_y, map_size)
 
@@ -416,13 +410,14 @@ def main():
                     rabbit_x, rabbit_y = new_x, new_y
                     game_map[rabbit_x][rabbit_y] = current_rabbit
                     os.system('cls')
+                os.system('cls')
             else:
                 os.system('cls')
                 print("Invalid move. Try again.")
 
 
 if __name__ == "__main__":
-    print()
+    os.system('cls')
     print('Innstructions:')
     print('Press Enter to play the game; Press any other key to Quit.')
     print('Repeat the same after every play.')
