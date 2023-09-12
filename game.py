@@ -1,5 +1,6 @@
 import random
 import os
+import keyboard
 
 # Constants for game elements
 RABBIT = 'r'
@@ -13,8 +14,8 @@ PATHWAY_STONE = '-'
 
 
 def create_map(map_size, num_carrots, num_rabbit_holes):
-    game_map = [[PATHWAY_STONE for _ in range(
-        map_size)] for _ in range(map_size)]
+    
+    game_map = [[PATHWAY_STONE for _ in range(map_size)] for _ in range(map_size)]
 
     # Place rabbit
     rabbit_x, rabbit_y = random.randint(
@@ -338,83 +339,92 @@ def jump_rabbit_hole(game_map, x, y, map_size):
 
 
 def main():
-    # Initialize game parameters
-    map_size = int(input("Enter the size of the grid (minimum 3): "))
-    num_carrots = int(input("Enter the number of carrots (minimum 2): "))
-    num_rabbit_holes = int(input("Enter the number of rabbit holes (minimum 2): "))
 
-    while map_size < 3:
-        map_size = int(input("Please enter grid size greater than 2: "))
+    try:
+        # Initialize game parameters
+        map_size = int(input("Enter the size of the grid (minimum 3): "))
+        num_carrots = int(input("Enter the number of carrots (minimum 2): "))
+        num_rabbit_holes = int(input("Enter the number of rabbit holes (minimum 2): "))
 
-    while num_carrots <= 1:
-        num_carrots = int(input("Please enter number of carrots greater than 1: "))
+        while map_size < 3:
+            map_size = int(input("Please enter grid size greater than 2: "))
 
-    while num_rabbit_holes <= 1:
-        num_rabbit_holes = int(input("Please enter number of holes greater than 1: "))
-        
-    game_map = create_map(map_size, num_carrots, num_rabbit_holes)
-    counter = 0
+        while num_carrots <= 1:
+            num_carrots = int(input("Please enter number of carrots greater than 1: "))
 
-    while True:
+        while num_rabbit_holes <= 1:
+            num_rabbit_holes = int(input("Please enter number of holes greater than 1: "))
+            
+        game_map = create_map(map_size, num_carrots, num_rabbit_holes)
+        counter = 0
 
-        if counter==2:
+        while True:
+
+            if counter==2:
+                display_map(game_map)
+                print("*************************")
+                print("Congratulations! You won!")
+                print("*************************")
+                break
+
             display_map(game_map)
-            print("Congratulations! You won!")
-            break
+            rabbit_x, rabbit_y = find_rabbit_position(game_map, map_size)
+            move = input("Enter your move (a/d/w/s/p/j/q): ").lower()
 
-        display_map(game_map)
-        rabbit_x, rabbit_y = find_rabbit_position(game_map, map_size)
-        move = input("Enter your move (a/d/w/s/p/j/q): ").lower()
+            if move == 'q':
+                print("Exiting the game.")
+                break
 
-        if move == 'q':
-            print("Exiting the game.")
-            break
-
-        elif move == 'p' or move == 'j':
-            os.system('cls')
-            if move == 'p':
-                co = pick_carrot(game_map, rabbit_x, rabbit_y, counter, map_size)
-                counter = co
-            elif move == 'j':
-                jump_rabbit_hole(game_map, rabbit_x, rabbit_y, map_size)
-
-        else:
-            new_x, new_y = rabbit_x, rabbit_y
-            m = {'a', 'd', 'w', 's', 'wd', 'dw',
-                 'wa', 'aw', 'as', 'sa', 'sd', 'ds'}
-            if move in m:
-                if move == 'a':
-                    new_y -= 1
-                elif move == 'd':
-                    new_y += 1
-                elif move == 'w':
-                    new_x -= 1
-                elif move == 's':
-                    new_x += 1
-                elif move == 'wd' or move == 'dw':
-                    new_x -= 1
-                    new_y += 1
-                elif move == 'wa' or move == 'aw':
-                    new_x -= 1
-                    new_y -= 1
-                elif move == 'as' or move == 'sa':
-                    new_x += 1
-                    new_y -= 1
-                elif move == 'sd' or move == 'ds':
-                    new_x += 1
-                    new_y += 1
-
-                if is_valid_move(game_map, new_x, new_y, map_size):
-                    current_rabbit = game_map[rabbit_x][rabbit_y]
-                    game_map[rabbit_x][rabbit_y] = PATHWAY_STONE
-                    rabbit_x, rabbit_y = new_x, new_y
-                    game_map[rabbit_x][rabbit_y] = current_rabbit
-                    os.system('cls')
+            elif move == 'p' or move == 'j':
                 os.system('cls')
+                if move == 'p':
+                    co = pick_carrot(game_map, rabbit_x, rabbit_y, counter, map_size)
+                    counter = co
+                elif move == 'j':
+                    jump_rabbit_hole(game_map, rabbit_x, rabbit_y, map_size)
+
             else:
-                os.system('cls')
-                print("Invalid move. Try again.")
+                new_x, new_y = rabbit_x, rabbit_y
+                m = {'a', 'd', 'w', 's', 'wd', 'dw',
+                    'wa', 'aw', 'as', 'sa', 'sd', 'ds'}
+                if move in m:
+                    if move == 'a':
+                        new_y -= 1
+                    elif move == 'd':
+                        new_y += 1
+                    elif move == 'w':
+                        new_x -= 1
+                    elif move == 's':
+                        new_x += 1
+                    elif move == 'wd' or move == 'dw':
+                        new_x -= 1
+                        new_y += 1
+                    elif move == 'wa' or move == 'aw':
+                        new_x -= 1
+                        new_y -= 1
+                    elif move == 'as' or move == 'sa':
+                        new_x += 1
+                        new_y -= 1
+                    elif move == 'sd' or move == 'ds':
+                        new_x += 1
+                        new_y += 1
 
+                    if is_valid_move(game_map, new_x, new_y, map_size):
+                        current_rabbit = game_map[rabbit_x][rabbit_y]
+                        game_map[rabbit_x][rabbit_y] = PATHWAY_STONE
+                        rabbit_x, rabbit_y = new_x, new_y
+                        game_map[rabbit_x][rabbit_y] = current_rabbit
+                        os.system('cls')
+                    os.system('cls')
+                else:
+                    os.system('cls')
+                    print("Invalid move. Try again.")
+
+    except Exception as e:
+        print("Wrong key press, ", e)
+        print("**********************************************************")
+        print("Restart the game...!")
+        print("**********************************************************")
 
 if __name__ == "__main__":
     os.system('cls')
